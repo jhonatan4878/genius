@@ -36,3 +36,15 @@ The first version of the game;
 1000 numbers can be informed in the application using an int[1000] array;
 
 Beep frequences between 400ms and 1200ms.
+
+## 2.0
+
+The numbers are assigned in a linked list, using dynamic memory allocation;
+
+9 numbers in each call;
+
+Animated calls during the input numbers;
+
+Beep frequences between 200ms and 650ms.
+
+9 memory colors;

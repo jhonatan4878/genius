@@ -1,176 +1,257 @@
 /*
- *  Jogo Genius versão 1.0
- *  Jhonatan Oliveira 
- */ 
+ *  Jogo Genius versão 2.0
+ *  Jhonatan Oliveira
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <windows.h>
 #include <time.h>
+#include <conio.h>
 
-int i = 0;	
 int fase = 0;
-int acerto = 0;
-int tempo = 1000;
+int contarAcertos = 0;
+int tempoJogo = 1000;
+int limite = 2;
 
-void informanumero(int k[]);
+typedef struct registroOrigem{
+	int numero;
+	struct registroOrigem * proximo;
+}TPOrigem;
+
+TPOrigem * origem = NULL;
+
+void definirNumero(TPOrigem * origemAtual);
 void errou();
 void acertou();
-void mostranumero(int v[]);
-void geranumero(int v[]);
+void mostranumero();
+void criaNovoNumero(TPOrigem * origemAtual, int limite);
 void inicia();
-
-int v[1000];
-int k[1000];
+void limparLista(TPOrigem * origem);
 
 int main(){
-	
 	srand(time(NULL));
 	inicia();
-	geranumero(v);		
+	criaNovoNumero(origem, limite);
 
-	getch();
 	return 0;
 }
 
 void inicia(){
-	int l, i = 0;
+	int frequencia;
+	int chave = 0;
 	char SYSTEM[][10] = {"COLOR 2A", "COLOR 3A", "COLOR 6A", "COLOR 5A", "COLOR 8A",\
-						 "COLOR 1A", "COLOR 9A", "COLOR 7A", "COLOR 8A", "COLOR 4A",\
-						 "COLOR 6A", "COLOR 2A", "COLOR 5A", "COLOR 1A", "COLOR 8A", "COLOR 0A"};
-	for(l = 300; l < 675; l+= 25){	
+			     "COLOR 1A", "COLOR 9A", "COLOR 7A", "COLOR 8A", "COLOR 4A",\
+			     "COLOR 6A", "COLOR 2A", "COLOR 5A", "COLOR 1A", "COLOR 8A", "COLOR 0A"};
+
+	for(frequencia = 300; frequencia < 675; frequencia+= 25){	
 		printf("CARREGANDO O JOGO...");
-		system(SYSTEM[i++]);
-		Beep(l,l);		
+		system(SYSTEM[chave++]);
+		Beep(frequencia,frequencia);
 		system("CLS");
 	}
-	system(SYSTEM[i]);
+	system(SYSTEM[chave]);
+
 	Sleep(1000);
-	printf("BEM VINDO AO GENIUS :) Pressione uma tecla para iniciar ");	
+	printf("BEM VINDO AO GENIUS :) Pressione uma tecla para iniciar ");
 	getch();
+
+	system("CLS");
+	printf("Fase 1 1075\n");
+
 	Sleep(1500);
 	system("CLS");
 }
 
-void geranumero(int v[]){
-			
-	v[i] = rand() % 5;		
-	mostranumero(v);
-	
+void criaNovoNumero(TPOrigem * origemAtual, int limite){
+	TPOrigem * novaOrigem;
+
+	novaOrigem = (TPOrigem * ) malloc(sizeof(TPOrigem));
+	novaOrigem->numero = rand() % limite;
+
+	if(origemAtual == NULL){
+		origem = novaOrigem;
+		origem->proximo = NULL;
+	}
+	else{
+		while(origemAtual->proximo != NULL)
+			origemAtual = origemAtual->proximo;
+		novaOrigem->proximo = NULL;
+		origemAtual->proximo = novaOrigem;
+	}
+	mostranumero(origem);
 }
 
-void mostranumero(int v[]){	
-	int j;
-	
-	for(j = 0; j <= i; j++){		
-		switch(v[j]){		
-			case 0:		
-				printf("%d ", v[j]);
+void mostranumero(TPOrigem * origemAtual){
+	while(origemAtual != NULL){
+		switch(origemAtual->numero){
+			case 0:
+				printf("%d ", origemAtual->numero);
 				system("COLOR 0A");
+				Beep(200, 150);
+				break;
+			case 1:
+				printf("%d ", origemAtual->numero);
+				system("COLOR 1A");
+				Beep(250, 150);
+				break;
+			case 2:
+				printf("%d ", origemAtual->numero);
+				system("COLOR 2A");
+				Beep(300, 150);
+				break;
+			case 3:
+				printf("%d ", origemAtual->numero);
+				system("COLOR 3A");
+				Beep(350, 150);
+				break;
+			case 4:
+				printf("%d ", origemAtual->numero);
+				system("COLOR 4A");
 				Beep(400, 150);
 				break;
-			case 1:								
-				printf("%d ", v[j]);
-				system("COLOR 1A");			
+			case 5:
+				printf("%d ", origemAtual->numero);
+				system("COLOR 5A");
+				Beep(450, 150);
+				break;
+			case 6:
+				printf("%d ", origemAtual->numero);
+				system("COLOR 6A");
+				Beep(500, 150);
+				break;
+			case 7:
+				printf("%d ", origemAtual->numero);
+				system("COLOR 7A");
+				Beep(550, 150);
+				break;
+			case 8:
+				printf("%d ", origemAtual->numero);
+				system("COLOR 8A");
 				Beep(600, 150);
 				break;
-			case 2:								
-				printf("%d ", v[j]);
-				system("COLOR 2A");			
-				Beep(800, 150);
-				break;		
-			case 3:		
-				printf("%d ", v[j]);
-				system("COLOR 3A");
-				Beep(1000, 150);
+			case 9:
+				printf("%d ", origemAtual->numero);
+				system("COLOR 9A");
+				Beep(650, 150);
 				break;
-			case 4:								
-				printf("%d ", v[j]);
-				system("COLOR 4A");			
-				Beep(1200, 150);
-				break;											
 		}
-		Sleep(tempo);
+		Sleep(tempoJogo);
 		system("CLS");
-	}	
-	
-	informanumero(k);	
+		origemAtual = origemAtual->proximo;
+	}
+	definirNumero(origem);
 }
-	
-void informanumero(int k[]){
-	system("COLOR 07");
-	int j;
-	char ch;
-	for(j = 0; j <= i; j++){				
-		ch = getch();
-		
-		k[j] = ch-48;
+
+void definirNumero(TPOrigem * origemAtual){
+	int numero;
+
+	while(origemAtual != NULL){
+		system("COLOR 07");
+
+		//numero = getch();
+		scanf("%d", &numero);
+		//numero = numero - 48;
 		system("CLS");
-		
-		if(v[j] != k[j]){		
+
+		if(origemAtual->numero != numero){
 			errou();
 			break;
 		}
 		else{
-			switch(k[j]){			
-			case 0:					
-				Beep(400, 150);
-				break;
-			case 1:								
-				Beep(600, 150);
-				break;
-			case 2:							
-				Beep(800, 150);
-				break;		
-			case 3:		
-				Beep(1000, 150);
-				break;
-			case 4:							
-				Beep(1200, 150);
-				break;	
+			switch(origemAtual->numero){
+				case 0:
+					system("COLOR A");
+					Beep(200, 150);
+					break;
+				case 1:
+					system("COLOR 1A");
+					Beep(250, 150);
+					break;
+				case 2:
+					system("COLOR 2A");
+					Beep(300, 150);
+					break;
+				case 3:
+					system("COLOR 3A");
+					Beep(350, 150);
+					break;
+				case 4:
+					system("COLOR 4A");
+					Beep(400, 150);
+					break;
+				case 5:
+					system("COLOR 5A");
+					Beep(450, 150);
+					break;
+				case 6:
+					system("COLOR 6A");
+					Beep(500, 150);
+					break;
+				case 7:
+					system("COLOR 7A");
+					Beep(550, 150);
+					break;
+				case 8:
+					system("COLOR 8A");
+					Beep(600, 150);
+					break;
+				case 9:
+					system("COLOR 9A");
+					Beep(650, 150);
+					break;
 			}
 		}
+		origemAtual = origemAtual->proximo;
 	}
-	
-	if(j > i)
-		acertou();	
+	if(origemAtual == NULL)
+		acertou();
 }
 
-void acertou(){
-	i++;
-	acerto++;
-	printf("Voce acertou \n\n");		
-	system("COLOR 3A");			
+void acertou(){	
+	contarAcertos++;
+	printf("Voce acertou \n\n");
+	system("COLOR 3A");
 	Beep(700, 700);
-		
-	if(acerto >= 3){	
-	
-		printf("Fase %d %d\n\n", fase+2, tempo);	
-		acerto = 0;
+	Sleep(500);
+    system("CLS");
+
+	if(contarAcertos >= 3){
+		printf("Fase %d %d\n\n", fase+2, tempoJogo);
+		contarAcertos = 0;
 		fase++;
-		if(tempo > 175)
-		tempo -= 75;
+		if(tempoJogo > 175){
+			tempoJogo -= 75;
+			limite++;
+		}
 	}
 	Sleep(1500);
 	system("CLS");
-	geranumero(v);
-}	
+	criaNovoNumero(origem, limite);
+}
 
 void errou(){
-	i = 0;
-	acerto = 0;
+	limparLista(origem);
+	
+	contarAcertos = 0;
 	fase = 0;
-	tempo = 1000;
-			
-	printf("Voce errou \nFase 1\n");		
+	tempoJogo = 1000;
+
+	printf("Voce errou \nFase 1\n");
 	system("COLOR 4A");	
-					
+
 	Beep(900, 700);
 	Sleep(1500);
 	
 	system("CLS");
-	geranumero(v);
-
+	criaNovoNumero(origem, 2);
 }
 
-
+void limparLista(TPOrigem * origemAtual){
+    while (origemAtual != NULL){
+        origem = origemAtual->proximo;
+        free (origemAtual);
+        origemAtual = origem;
+    }
+    origem = NULL;
+}

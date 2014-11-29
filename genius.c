@@ -1,5 +1,5 @@
 /*
- *  Jogo Genius versão 2.0
+ *  Jogo Genius versão 2.01
  *  Jhonatan Oliveira
  */
 
@@ -28,6 +28,7 @@ void mostranumero();
 void criaNovoNumero(TPOrigem * origemAtual, int limite);
 void inicia();
 void limparLista(TPOrigem * origem);
+void fecharPrograma();
 
 int main(){
 	srand(time(NULL));
@@ -53,8 +54,8 @@ void inicia(){
 	system(SYSTEM[chave]);
 
 	Sleep(1000);
-	printf("BEM VINDO AO GENIUS :) Pressione uma tecla para iniciar ");
-	getch();
+	printf("BEM VINDO AO GENIUS :) O jogo vai iniciar em instantes.\n");
+	Sleep(2500);	
 
 	system("CLS");
 	printf("Fase 1 1075\n");
@@ -153,6 +154,10 @@ void definirNumero(TPOrigem * origemAtual){
 		scanf("%d", &numero);
 		//numero = numero - 48;
 		system("CLS");
+		
+		if(numero == -1){
+			fecharPrograma();
+		}
 
 		if(origemAtual->numero != numero){
 			errou();
@@ -254,4 +259,10 @@ void limparLista(TPOrigem * origemAtual){
         origemAtual = origem;
     }
     origem = NULL;
+}
+
+void fecharPrograma(){
+	limparLista(origem);
+	printf("Obrigado por jogar Genius!! :)");
+	exit(0);
 }

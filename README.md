@@ -48,3 +48,7 @@ Animated calls during the input numbers;
 Beep frequences between 200ms and 650ms.
 
 9 memory colors;
+
+## 2.01
+
+It allows closing the program with the choose of the number 0 during the running

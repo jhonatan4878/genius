@@ -1,5 +1,5 @@
 /*
- *  Jogo Genius versão 2.01
+ *  Jogo Genius versÃ£o 2.1
  *  Jhonatan Oliveira
  */
 
@@ -24,16 +24,18 @@ TPOrigem * origem = NULL;
 void definirNumero(TPOrigem * origemAtual);
 void errou();
 void acertou();
-void mostranumero();
-void criaNovoNumero(TPOrigem * origemAtual, int limite);
+void mostrarNumero();
+void criarNovoNumero(TPOrigem * origemAtual, int limite);
 void inicia();
 void limparLista(TPOrigem * origem);
+void desabilitarBotaoFechar();
 void fecharPrograma();
 
 int main(){
+	desabilitarBotaoFechar();
 	srand(time(NULL));
 	inicia();
-	criaNovoNumero(origem, limite);
+	criarNovoNumero(origem, limite);
 
 	return 0;
 }
@@ -54,7 +56,7 @@ void inicia(){
 	system(SYSTEM[chave]);
 
 	Sleep(1000);
-	printf("BEM VINDO AO GENIUS :) O jogo vai iniciar em instantes.\n");
+	printf("BEM VINDO AO GENIUS :) O jogo vai iniciar em instantes.\nPARA SAIR, DIGITE \"-1 + ENTER\"");
 	Sleep(2500);	
 
 	system("CLS");
@@ -64,7 +66,7 @@ void inicia(){
 	system("CLS");
 }
 
-void criaNovoNumero(TPOrigem * origemAtual, int limite){
+void criarNovoNumero(TPOrigem * origemAtual, int limite){
 	TPOrigem * novaOrigem;
 
 	novaOrigem = (TPOrigem * ) malloc(sizeof(TPOrigem));
@@ -80,10 +82,10 @@ void criaNovoNumero(TPOrigem * origemAtual, int limite){
 		novaOrigem->proximo = NULL;
 		origemAtual->proximo = novaOrigem;
 	}
-	mostranumero(origem);
+	mostrarNumero(origem);
 }
 
-void mostranumero(TPOrigem * origemAtual){
+void mostrarNumero(TPOrigem * origemAtual){
 	while(origemAtual != NULL){
 		switch(origemAtual->numero){
 			case 0:
@@ -148,13 +150,12 @@ void definirNumero(TPOrigem * origemAtual){
 	int numero;
 
 	while(origemAtual != NULL){
-		system("COLOR 07");
+		system("COLOR 0A");
 
 		//numero = getch();
 		scanf("%d", &numero);
 		//numero = numero - 48;
 		system("CLS");
-		
 		if(numero == -1){
 			fecharPrograma();
 		}
@@ -166,7 +167,7 @@ void definirNumero(TPOrigem * origemAtual){
 		else{
 			switch(origemAtual->numero){
 				case 0:
-					system("COLOR A");
+					system("COLOR 0A");
 					Beep(200, 150);
 					break;
 				case 1:
@@ -232,12 +233,12 @@ void acertou(){
 	}
 	Sleep(1500);
 	system("CLS");
-	criaNovoNumero(origem, limite);
+	criarNovoNumero(origem, limite);
 }
 
 void errou(){
 	limparLista(origem);
-	
+
 	contarAcertos = 0;
 	fase = 0;
 	tempoJogo = 1000;
@@ -247,18 +248,41 @@ void errou(){
 
 	Beep(900, 700);
 	Sleep(1500);
-	
+
 	system("CLS");
-	criaNovoNumero(origem, 2);
+	criarNovoNumero(origem, 2);
 }
 
 void limparLista(TPOrigem * origemAtual){
-    while (origemAtual != NULL){
-        origem = origemAtual->proximo;
-        free (origemAtual);
-        origemAtual = origem;
-    }
-    origem = NULL;
+	while (origemAtual != NULL){
+		origem = origemAtual->proximo;
+		free (origemAtual);
+		origemAtual = origem;
+	}
+	origem = NULL;
+}
+
+void desabilitarBotaoFechar(){	
+	HWND hnd;
+	HMENU menu;
+	int i, j, cont;
+	LPTSTR buffer;
+
+	hnd = GetConsoleWindow();
+	menu = GetSystemMenu(hnd, 0);
+	cont = GetMenuItemCount(menu); 
+	j = -1;
+
+	buffer = (TCHAR*) malloc (256 *sizeof(TCHAR));
+	for (i=0; i<cont; i++){
+		GetMenuString(menu, i, buffer, 255, MF_BYPOSITION);
+		if (!strcmp(buffer, "&Fechar") || !strcmp(buffer, "&Close")){
+			j = i;
+			break;
+		}
+	}
+	if (j >= 0)
+		RemoveMenu(menu, j, MF_BYPOSITION);
 }
 
 void fecharPrograma(){

@@ -51,4 +51,10 @@ Beep frequences between 200ms and 650ms.
 
 ## 2.01
 
-It allows closing the program with the choose of the number 0 during the running
+It allows closing the program with the choose of the number 0 during the running.
+
+## 2.1
+
+The English version of the game is now avaliable.
+
+Now the button Close (Fechar) is disabled. Probabily only the Windows OS has this feature. Comment the method `disableCloseButton()` or `desabilitarBotaoFechar` to use the button.

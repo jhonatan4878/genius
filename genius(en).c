@@ -1,5 +1,5 @@
 /*
- *  Game Genius version 2.1
+ *  Game Genius version 2.2
  *  Jhonatan Oliveira
  */
 
@@ -13,6 +13,8 @@ int stage = 0;
 int countRightAnswers = 0;
 int timeGame = 1000;
 int limit = 2;
+int score = 0;
+int recordScore = 0;
 
 typedef struct originRegister{
 	int number;
@@ -60,7 +62,7 @@ void start(){
 	Sleep(2500);	
 
 	system("CLS");
-	printf("STAGE 1 1075\n");
+	printf("STAGE 1 1000\n");
 	
 	Sleep(1500);
 	system("CLS");
@@ -156,6 +158,7 @@ void defineNumber(TPOrigin * currentOrigin){
 		scanf("%d", &number);
 		//number = number - 48;		
 		system("CLS");
+
 		if(number == -1){		
 			closeApplication();
 		}
@@ -216,18 +219,21 @@ void defineNumber(TPOrigin * currentOrigin){
 
 void right(){
 	countRightAnswers++;
-	printf("IT MATCHED!\n\n");
+	score += 10;
+	printf("IT MATCHED! \n\nSCORE: %d\n\n", score);
 	system("COLOR 3A");
 	Beep(700, 700);
 	Sleep(500);
     system("CLS");
 
-	if(countRightAnswers >= 3){
-		printf("STAGE %d %d\n\n", stage+2, timeGame);
+	if(countRightAnswers >= 4){
+		score += 20 * (stage+1);
+
+		printf("Bonus: %d\n\nSTAGE %d %d\n\n", 20 * (stage+1), stage+2, timeGame);
 		countRightAnswers = 0;
 		stage++;
-		if(timeGame > 175){
-			timeGame -= 75;
+		if(timeGame > 150){
+			timeGame -= 50;
 			limit++;
 		}
 	}
@@ -239,15 +245,22 @@ void right(){
 void mistake(){
 	cleanList(origin);
 
-	countRightAnswers = 0;
-	stage = 0;
-	timeGame = 1000;
-
-	printf("YOU LOST!\nStage 1\n");
+	if(score > recordScore)
+		recordScore = score;
+ 	
+	printf("VOU LOST \nSTAGE %d\n", stage+1);
+	printf("SCORE: %d\nRECORD SCORE: %d\n\n", score, recordScore);
+	printf("STAGE 1\n");
 	system("COLOR 4A");
 
 	Beep(900, 700);
+	getch();
 	Sleep(1500);
+	
+	score = 0;
+	countRightAnswers = 0;
+	stage = 0;
+	timeGame = 1000;
 
 	system("CLS");
 	createNewNumber(origin, 2);

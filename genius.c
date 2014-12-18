@@ -1,5 +1,5 @@
 /*
- *  Jogo Genius versão 2.1
+ *  Jogo Genius versão 2.2
  *  Jhonatan Oliveira
  */
 
@@ -13,6 +13,8 @@ int fase = 0;
 int contarAcertos = 0;
 int tempoJogo = 1000;
 int limite = 2;
+int pontuacao = 0;
+int pontuacaoRecorde = 0;
 
 typedef struct registroOrigem{
 	int numero;
@@ -24,18 +26,18 @@ TPOrigem * origem = NULL;
 void definirNumero(TPOrigem * origemAtual);
 void errou();
 void acertou();
-void mostrarNumero();
-void criarNovoNumero(TPOrigem * origemAtual, int limite);
+void mostranumero();
+void criaNovoNumero(TPOrigem * origemAtual, int limite);
 void inicia();
 void limparLista(TPOrigem * origem);
 void desabilitarBotaoFechar();
 void fecharPrograma();
 
 int main(){
-	desabilitarBotaoFechar();
 	srand(time(NULL));
+	desabilitarBotaoFechar();
 	inicia();
-	criarNovoNumero(origem, limite);
+	criaNovoNumero(origem, limite);
 
 	return 0;
 }
@@ -56,17 +58,17 @@ void inicia(){
 	system(SYSTEM[chave]);
 
 	Sleep(1000);
-	printf("BEM VINDO AO GENIUS :) O jogo vai iniciar em instantes.\nPARA SAIR, DIGITE \"-1 + ENTER\"");
+	printf("BEM VINDO AO GENIUS :) O jogo vai iniciar em instantes.\n");
 	Sleep(2500);	
 
 	system("CLS");
-	printf("Fase 1 1075\n");
+	printf("Fase 1 1000\n");
 
 	Sleep(1500);
 	system("CLS");
 }
 
-void criarNovoNumero(TPOrigem * origemAtual, int limite){
+void criaNovoNumero(TPOrigem * origemAtual, int limite){
 	TPOrigem * novaOrigem;
 
 	novaOrigem = (TPOrigem * ) malloc(sizeof(TPOrigem));
@@ -82,10 +84,10 @@ void criarNovoNumero(TPOrigem * origemAtual, int limite){
 		novaOrigem->proximo = NULL;
 		origemAtual->proximo = novaOrigem;
 	}
-	mostrarNumero(origem);
+	mostranumero(origem);
 }
 
-void mostrarNumero(TPOrigem * origemAtual){
+void mostranumero(TPOrigem * origemAtual){
 	while(origemAtual != NULL){
 		switch(origemAtual->numero){
 			case 0:
@@ -150,12 +152,13 @@ void definirNumero(TPOrigem * origemAtual){
 	int numero;
 
 	while(origemAtual != NULL){
-		system("COLOR 0A");
+		system("COLOR 07");
 
 		//numero = getch();
 		scanf("%d", &numero);
 		//numero = numero - 48;
 		system("CLS");
+		
 		if(numero == -1){
 			fecharPrograma();
 		}
@@ -167,7 +170,7 @@ void definirNumero(TPOrigem * origemAtual){
 		else{
 			switch(origemAtual->numero){
 				case 0:
-					system("COLOR 0A");
+					system("COLOR A");
 					Beep(200, 150);
 					break;
 				case 1:
@@ -216,50 +219,60 @@ void definirNumero(TPOrigem * origemAtual){
 
 void acertou(){	
 	contarAcertos++;
-	printf("Voce acertou \n\n");
+	pontuacao += 10;
+	printf("Voce acertou!\n\nPontuacao: %d\n\n", pontuacao);
 	system("COLOR 3A");
 	Beep(700, 700);
 	Sleep(500);
-    system("CLS");
+    system("CLS");    
 
-	if(contarAcertos >= 3){
-		printf("Fase %d %d\n\n", fase+2, tempoJogo);
-		contarAcertos = 0;
+	if(contarAcertos >= 4){		
+		pontuacao += 20 * (fase+1);
+		
+		printf("Bonus: %d\n\nFase %d %d\n\n", 20 * (fase+1), fase+2, tempoJogo);
+		contarAcertos = 0;		
 		fase++;
-		if(tempoJogo > 175){
-			tempoJogo -= 75;
-			limite++;
+		if(tempoJogo > 150){
+			tempoJogo -= 50;
+			limite++;			
 		}
 	}
 	Sleep(1500);
 	system("CLS");
-	criarNovoNumero(origem, limite);
+	criaNovoNumero(origem, limite);
 }
 
 void errou(){
-	limparLista(origem);
+	limparLista(origem);		
 
+	if(pontuacao > pontuacaoRecorde)
+		pontuacaoRecorde = pontuacao;
+
+	printf("Voce errou \nFase %d\n", fase+1);
+	printf("Pontuacao: %d\nPontuacao recorde: %d\n\n", pontuacao, pontuacaoRecorde);
+	printf("Fase 1\n");
+	system("COLOR 4A");			
+
+	Beep(900, 700);
+	getch();
+	Sleep(1500);
+
+	pontuacao = 0;
 	contarAcertos = 0;
 	fase = 0;
 	tempoJogo = 1000;
 
-	printf("Voce errou \nFase 1\n");
-	system("COLOR 4A");	
-
-	Beep(900, 700);
-	Sleep(1500);
-
 	system("CLS");
-	criarNovoNumero(origem, 2);
+	criaNovoNumero(origem, 2);
 }
 
 void limparLista(TPOrigem * origemAtual){
-	while (origemAtual != NULL){
-		origem = origemAtual->proximo;
-		free (origemAtual);
-		origemAtual = origem;
-	}
-	origem = NULL;
+    while (origemAtual != NULL){
+        origem = origemAtual->proximo;
+        free (origemAtual);
+        origemAtual = origem;
+    }
+    origem = NULL;
 }
 
 void desabilitarBotaoFechar(){	

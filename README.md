@@ -51,7 +51,7 @@ Beep frequences between 200ms and 650ms.
 
 ## 2.01
 
-It allows closing the program with the choose of the number 0 during the running.
+It allows closing the program with the choose of the number -1 during the running.
 
 ## 2.1
 
@@ -61,4 +61,6 @@ Now the button Close (Fechar) is disabled. Probabily only the Windows OS has thi
 
 ## 2.2
 
-Now the game shows the score and the recordScore in each game played while the application is being played.
+Now the game shows the score and the recordScore in each game played while the application is being played;
+
+17 speed levels.
